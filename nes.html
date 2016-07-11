@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>JSNES: A JavaScript NES emulator</title>
+    <script src="vendor/tracking-min.js"></script>
+    <script src="vendor/dat.gui.min.js"></script>
+    <script src="vendor/stats.min.js"></script>
+    <script src="vendor/color_camera_gui.js"></script>
+</head>
+<style>
+    video, canvas {
+      margin-left: 200px;
+      margin-top: 235px;
+      position: absolute;
+    }
+</style>
+<body>
+
+
+    <div class="camera">
+        <div class="demo-container">
+          <video id="video" width="600" height="250" preload autoplay loop muted controls></video>
+          <canvas id="canvas" width="600" height="250"></canvas>
+        </div>
+    </div>
+
+    <script>
+      window.onload = function() {
+        var video = document.getElementById('video');
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var elevation;
+        var leftRight;
+        var smoothE = 0;
+        var smoothLR = 1;
+        // document.getElementById('video').setAttribute('style', "z-index: 1");
+
+        var tracker = new tracking.ColorTracker();
+
+        tracking.track('#video', tracker, { camera: true });
+
+        tracker.on('track', function(event) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          // event.data.forEach(function(rect) {
+          //   if (rect.color === 'custom') {
+          //     rect.color = tracker.customColor;
+          //   }
+
+          //   context.strokeStyle = rect.color;
+          //   context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          //   context.font = '11px Helvetica';
+          //   context.fillStyle = "#fff";
+          //   context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          //   context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+          // });
+
+          // Hacked up way to only have one square detected. Throwing a exception after the first object.
+          var BreakException= {};
+          try {
+            event.data.forEach(function(rect) {
+              if (rect.color === 'custom') {
+                rect.color = tracker.customColor;
+              }
+
+              context.strokeStyle = rect.color;
+              context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+              context.font = '11px Helvetica';
+              context.fillStyle = "#fff";
+              context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+              context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+              document.title = rect.x + ', ' + rect.y;
+              var getDirection = function() {
+                // 550 200
+                var col = Math.floor(rect.x / 166);
+                var row = Math.floor(rect.y / 60);
+                if (row === 0) {
+                    return 'up'
+                } else if (row === 2) {
+                    return 'down'
+                } else if (col === 0 && row === 1) {
+                    return 'left'
+                } else if (col === 1 && row === 1) {
+                    return 'none'
+                } else if (col === 2 && row === 1) {
+                    return 'right'
+                }
+              }
+              $('.direction').text(getDirection());
+              throw BreakException;
+            });
+          } catch(e) {
+              if (e!==BreakException) throw e;
+          }
+          //
+
+
+
+        });
+
+       initGUIControllers(tracker);
+      };
+    </script>
+
+
+
+
+
+    
+    <div id="emulator"></div>
+    
+    <h2>Controls</h2>
+    <table id="controls">
+        <tr>
+            <th>Button</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+        </tr>
+        <tr>
+            <td>Left</td>
+            <td>Left</td>
+            <td>Num-4</td>
+        <tr>
+            <td>Right</td>
+            <td>Right</td>
+            <td>Num-6</td>
+        </tr>
+        <tr>
+            <td>Up</td>
+            <td>Up</td>
+            <td>Num-8</td>
+        </tr>
+        <tr>
+            <td>Down</td>
+            <td>Down</td>
+            <td>Num-2</td>
+        </tr>
+        <tr>
+            <td>A</td>
+            <td>X</td>
+            <td>Num-7</td>
+        </tr>
+        <tr>
+            <td>B</td>
+            <td>Z/Y</td>
+            <td>Num-9</td>
+        </tr>
+        <tr>
+            <td>Start</td>
+            <td>Enter</td>
+            <td>Num-1</td>
+        </tr>
+        <tr>
+            <td>Select</td>
+            <td>Ctrl</td>
+            <td>Num-3</td>
+        </tr>
+    </table>
+    <h4 class="direction">None</h4>
+
+    <script src="lib/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="lib/dynamicaudio-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/nes.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/utils.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/cpu.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/keyboard.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/mappers.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/papu.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/ppu.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/rom.js" type="text/javascript" charset="utf-8"></script>
+    <script src="nes/ui.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        var nes;
+        $(function() {
+            nes = new JSNES({
+                'ui': $('#emulator').JSNESUI({
+                    "Games": [
+                        ['Super Mario Bros.', 'roms/Super Mario Bros. (JU) (PRG0) [!].nes'],
+                        ['Concentration Room', 'roms/croom/croom.nes'],
+                        ['LJ65', 'roms/lj65/lj65.nes']
+                    ]
+                })
+            });
+        });
+    </script>
+    <!--[if IE]>
+        <script type="text/vbscript" src="source/jsnes-ie-hacks.vbscript"></script>
+    <![endif]-->
+
+</body>
+</html>
