@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Shopping</title>
+    <!-- <meta name="description" content="Shopping - A-Frame"> -->
+    <!-- <link rel="stylesheet" href="vendor/demo.css"> -->
+
+    <script src="vendor/tracking-min.js"></script>
+    <script src="vendor/dat.gui.min.js"></script>
+    <script src="vendor/stats.min.js"></script>
+    <script src="vendor/color_camera_gui.js"></script>
+    <script src="vendor/aframe.js"></script>
+
+  </head>
+  <style>
+    video, canvas {
+      /*margin-left: 100px;
+      margin-top: 35px;*/
+      position: absolute;
+    }
+  </style>
+  <body>
+
+    <div class="demo-container">
+      <video id="video" width="600" height="250" preload autoplay loop muted controls></video>
+      <canvas id="canvas" width="600" height="250"></canvas>
+    </div>
+
+
+    <script>
+      window.onload = function() {
+        var video = document.getElementById('video');
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var elevation;
+        var leftRight;
+        var smoothE = 0;
+        var smoothLR = 1;
+        // document.getElementById('video').setAttribute('style', "z-index: 1");
+
+        var tracker = new tracking.ColorTracker();
+
+        tracking.track('#video', tracker, { camera: true });
+
+        tracker.on('track', function(event) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          // event.data.forEach(function(rect) {
+          //   if (rect.color === 'custom') {
+          //     rect.color = tracker.customColor;
+          //   }
+
+          //   context.strokeStyle = rect.color;
+          //   context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+          //   context.font = '11px Helvetica';
+          //   context.fillStyle = "#fff";
+          //   context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          //   context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+          // });
+
+          // Hacked up way to only have one square detected. Throwing a exception after the first object.
+          var BreakException= {};
+          try {
+            event.data.forEach(function(rect) {
+              if (rect.color === 'custom') {
+                rect.color = tracker.customColor;
+              }
+
+              context.strokeStyle = rect.color;
+              context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+              context.font = '11px Helvetica';
+              context.fillStyle = "#fff";
+              context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+              context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+              document.title = rect.x + ', ' + rect.y;
+              throw BreakException;
+            });
+          } catch(e) {
+              if (e!==BreakException) throw e;
+          }
+          //
+
+
+
+        });
+
+       initGUIControllers(tracker);
+      };
+    </script>
+
+
+  </body>
+</html>
