@@ -6,7 +6,7 @@
     <!-- <meta name="description" content="Shopping - A-Frame"> -->
     <!-- <link rel="stylesheet" href="vendor/demo.css"> -->
 
-    <script src="vendor/tracking-min.js"></script>
+    <script src="vendor/tracking.js"></script>
     <script src="vendor/dat.gui.min.js"></script>
     <script src="vendor/stats.min.js"></script>
     <script src="vendor/color_camera_gui.js"></script>
@@ -29,7 +29,39 @@
 
 
     <script>
+      // var rearCamera = {
+      //   optional: [{sourceId: 0}]
+      // }
+
+      // MODIFIED - Need to init rearCamera ASAP
+      var rearCam;
+      (function rearCamera() {
+        console.log('inside rear camera')
+        MediaStreamTrack.getSources(function(s) {
+          // console.log(s[3].id)
+          rearCam = s[1].id;
+        })
+      })()
+
       window.onload = function() {
+
+
+        // Get ID of last element (we are assuming this is the camera)
+        // MediaStreamTrack.getSources(function(s) {
+        //   rearCamera.optional.sourceId = s[3].id;
+        //   alert(s[3].id + " / " + s[4].id)
+        //   console.log('rearCamera id: ', rearCamera)
+        // })
+
+        // window.navigator.getUserMedia(
+        //   {video:true}, 
+        //   function(stream){
+        //     alert(stream.id);
+        //   }, 
+        //   function(err){alert(err);
+        // })
+
+
         var video = document.getElementById('video');
         var canvas = document.getElementById('canvas');
         var context = canvas.getContext('2d');
@@ -37,11 +69,13 @@
         var leftRight;
         var smoothE = 0;
         var smoothLR = 1;
-        // document.getElementById('video').setAttribute('style', "z-index: 1");
+        document.getElementById('video').setAttribute('style', "z-index: 1");
 
         var tracker = new tracking.ColorTracker();
 
-        tracking.track('#video', tracker, { camera: true });
+        setTimeout(function() {
+          tracking.track('#video', tracker, { camera: true });
+        }, 2000)
 
         tracker.on('track', function(event) {
           context.clearRect(0, 0, canvas.width, canvas.height);
