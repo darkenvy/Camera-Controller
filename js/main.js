@@ -1,73 +1,54 @@
-'use strict';
+// MODIFIED - Need to init rearCamera ASAP
+      var rearCam;
+      (function rearCamera() {
+        console.log('inside rear camera')
+        MediaStreamTrack.getSources(function(s) {
+          // MODIFIED - Manually specified 1 as the rear camera for the S7. Should default to normal for desktop testing
+          rearCam = s[1].id;
+        })
+      })()
 
-var videoElement = document.querySelector('video');
-var audioSelect = document.querySelector('select#audioSource');
-var videoSelect = document.querySelector('select#videoSource');
+      window.onload = function() {
+        var video = document.getElementById('video');
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var elevation;
+        var leftRight;
+        var smoothE = 0;
+        var smoothLR = 1;
+        document.getElementById('video').setAttribute('style', "z-index: 1");
+        var tracker = new tracking.ColorTracker();
 
-navigator.getUserMedia = navigator.getUserMedia ||
-  navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        // Initiate camera after a timeout. This is so we can grab the rear camera in time.
+        // Should set this to run inside the return function of that rear camera grab fucntion
+        setTimeout(function() {
+          tracking.track('#video', tracker, { camera: true });
+        }, 1000)
 
-function gotSources(sourceInfos) {
-  for (var i = 0; i !== sourceInfos.length; ++i) {
-    var sourceInfo = sourceInfos[i];
-    var option = document.createElement('option');
-    option.value = sourceInfo.id;
-    if (sourceInfo.kind === 'audio') {
-      option.text = sourceInfo.label || 'microphone ' +
-        (audioSelect.length + 1);
-      audioSelect.appendChild(option);
-    } else if (sourceInfo.kind === 'video') {
-      option.text = sourceInfo.label || 'camera ' + (videoSelect.length + 1);
-      videoSelect.appendChild(option);
-    } else {
-      console.log('Some other kind of source: ', sourceInfo);
-    }
-  }
-}
+        // -------------- On Track ----------------- //
+        tracker.on('track', function(event) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
 
-if (typeof MediaStreamTrack === 'undefined' ||
-    typeof MediaStreamTrack.getSources === 'undefined') {
-  alert('This browser does not support MediaStreamTrack.\n\nTry Chrome.');
-} else {
-  MediaStreamTrack.getSources(gotSources);
-}
+          // Multi-target tracking
+          event.data.forEach(function(rect) {
+            if (rect.color === 'custom') {
+              rect.color = tracker.customColor;
+            }
 
-function successCallback(stream) {
-  window.stream = stream; // make stream available to console
-  videoElement.src = window.URL.createObjectURL(stream);
-  videoElement.play();
-}
+            context.strokeStyle = rect.color;
+            context.strokeRect(rect.x, rect.y, rect.width, rect.height);
+            context.font = '11px Helvetica';
+            context.fillStyle = "#fff";
+            context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+            context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+          });
 
-function errorCallback(error) {
-  console.log('navigator.getUserMedia error: ', error);
-}
+          
+          // -------------- End of On Track ----------------- //
 
-function start() {
-  // If streaming and the user switches cameras
-  // Then kill it.
-  if (window.stream) {
-    videoElement.src = null;
-    window.stream.stop();
-  }
-  var audioSource = audioSelect.value;
-  var videoSource = videoSelect.value;
-  var constraints = {
-    audio: {
-      optional: [{
-        sourceId: audioSource
-      }]
-    },
-    video: {
-      optional: [{
-        sourceId: videoSource
-      }]
-    }
-  };
-  navigator.getUserMedia(constraints, successCallback, errorCallback);
-}
+        });
 
-// onchange events binding to start()
-audioSelect.onchange = start;
-videoSelect.onchange = start;
 
-// start();
+      // Turn on the Color controller (seems to be required)
+      initGUIControllers(tracker);
+      };

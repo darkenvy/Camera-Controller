@@ -11,6 +11,7 @@
     <script src="vendor/stats.min.js"></script>
     <script src="vendor/color_camera_gui.js"></script>
     <script src="vendor/aframe.js"></script>
+    <script src="js/main.js"></script>
 
   </head>
   <style>
@@ -19,109 +20,17 @@
       margin-top: 35px;
       position: absolute;
     }
+    body video {
+      z-index: 0 !important;
+      /*margin-left: -167px;*/
+    }
   </style>
   <body>
 
     <div class="demo-container">
-      <video id="video" width="600" height="250" preload autoplay loop muted controls></video>
-      <canvas id="canvas" width="600" height="250"></canvas>
+      <video id="video" width="320" height="240" preload autoplay loop muted></video>
+      <canvas id="canvas" width="320" height="320"></canvas>
     </div>
-
-
-    <script>
-      // var rearCamera = {
-      //   optional: [{sourceId: 0}]
-      // }
-
-      // MODIFIED - Need to init rearCamera ASAP
-      var rearCam;
-      (function rearCamera() {
-        console.log('inside rear camera')
-        MediaStreamTrack.getSources(function(s) {
-          // console.log(s[3].id)
-          rearCam = s[1].id;
-        })
-      })()
-
-      window.onload = function() {
-
-
-        // Get ID of last element (we are assuming this is the camera)
-        // MediaStreamTrack.getSources(function(s) {
-        //   rearCamera.optional.sourceId = s[3].id;
-        //   alert(s[3].id + " / " + s[4].id)
-        //   console.log('rearCamera id: ', rearCamera)
-        // })
-
-        // window.navigator.getUserMedia(
-        //   {video:true}, 
-        //   function(stream){
-        //     alert(stream.id);
-        //   }, 
-        //   function(err){alert(err);
-        // })
-
-
-        var video = document.getElementById('video');
-        var canvas = document.getElementById('canvas');
-        var context = canvas.getContext('2d');
-        var elevation;
-        var leftRight;
-        var smoothE = 0;
-        var smoothLR = 1;
-        document.getElementById('video').setAttribute('style', "z-index: 1");
-
-        var tracker = new tracking.ColorTracker();
-
-        setTimeout(function() {
-          tracking.track('#video', tracker, { camera: true });
-        }, 2000)
-
-        tracker.on('track', function(event) {
-          context.clearRect(0, 0, canvas.width, canvas.height);
-
-          // event.data.forEach(function(rect) {
-          //   if (rect.color === 'custom') {
-          //     rect.color = tracker.customColor;
-          //   }
-
-          //   context.strokeStyle = rect.color;
-          //   context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-          //   context.font = '11px Helvetica';
-          //   context.fillStyle = "#fff";
-          //   context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-          //   context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
-          // });
-
-          // Hacked up way to only have one square detected. Throwing a exception after the first object.
-          var BreakException= {};
-          try {
-            event.data.forEach(function(rect) {
-              if (rect.color === 'custom') {
-                rect.color = tracker.customColor;
-              }
-
-              context.strokeStyle = rect.color;
-              context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-              context.font = '11px Helvetica';
-              context.fillStyle = "#fff";
-              context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
-              context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
-              document.title = rect.x + ', ' + rect.y;
-              throw BreakException;
-            });
-          } catch(e) {
-              if (e!==BreakException) throw e;
-          }
-          //
-
-
-
-        });
-
-       initGUIControllers(tracker);
-      };
-    </script>
 
 
   </body>
