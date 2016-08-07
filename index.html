@@ -1,52 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
+    <meta charset="utf-8">
+    <title>Shopping</title>
+    <!-- <meta name="description" content="Shopping - A-Frame"> -->
+    <!-- <link rel="stylesheet" href="vendor/demo.css"> -->
 
-<meta name="description" content="Simplest possible examples of HTML, CSS and JavaScript." />
-<meta name="author" content="//samdutton.com">
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-<meta itemprop="name" content="simpl.info: simplest possible examples of HTML, CSS and JavaScript">
-<meta itemprop="image" content="/icon_192x192.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta id="theme-color" name="theme-color" content="#fff">
+    <script src="vendor/tracking.js"></script>
+    <script src="vendor/dat.gui.min.js"></script>
+    <script src="vendor/stats.min.js"></script>
+    <script src="vendor/color_camera_gui.js"></script>
+    <script src="vendor/aframe.js"></script>
+    <script src="js/main.js"></script>
 
-<base target="_blank">
-
-<title>MediaStreamTrack.getSources()</title>
-
-<link rel="stylesheet" href="../../css/main.css" />
-
+  </head>
   <style>
-  div.select {
-    margin: 0 0 1em 0;
-  }
+    video, canvas {
+      margin-left: 100px;
+      margin-top: 35px;
+      position: absolute;
+    }
+    body video {
+      z-index: 0 !important;
+      /*margin-left: -167px;*/
+    }
   </style>
+  <body>
 
-</head>
-
-<body>
-
-<div id="container">
-
-
-  <div class="select">
-    <label for="audioSource">Audio source: </label>
-    <select id="audioSource"></select>
-  </div>
-
-  <div class="select">
-    <label for="videoSource">Video source: </label>
-    <select id="videoSource"></select>
-  </div>
-
-  <video muted autoplay></video>
+    <div class="demo-container">
+      <video id="video" width="160" height="120" preload autoplay loop muted></video>
+      <canvas id="canvas" width="160" height="120"></canvas>
+    </div>
 
 
-
-  <script src="js/main.js"></script>
-</div>
-
-<!-- <script src="../../js/lib/ga.js"></script> -->
-
-</body>
+  </body>
 </html>

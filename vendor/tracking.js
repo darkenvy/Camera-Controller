@@ -1,3 +1,5 @@
+// RENO, I marked things with MODIFIED
+
 /**
  * tracking - A modern approach for Computer Vision on the web.
  * @author Eduardo Lundgren <edu@rdo.io>
