@@ -5,36 +5,27 @@
     <title>Shopping</title>
     <!-- <meta name="description" content="Shopping - A-Frame"> -->
     <!-- <link rel="stylesheet" href="vendor/demo.css"> -->
-
     <script src="vendor/tracking.js"></script>
     <script src="vendor/dat.gui.min.js"></script>
     <script src="vendor/stats.min.js"></script>
     <script src="vendor/color_camera_gui.js"></script>
     <script src="vendor/aframe.js"></script>
     <script src="js/main.js"></script>
-
+    <link rel="stylesheet" href="css/styles.css">
   </head>
-  <style>
-    video, canvas {
-      margin-left: 100px;
-      margin-top: 35px;
-      position: absolute;
-    }
-    body video {
-      z-index: 0 !important;
-      /*margin-left: -167px;*/
-    }
-  </style>
+
   <body>
 
     <div class="demo-container">
-      <!-- <video id="video" width="160" height="120" preload autoplay loop muted></video>
-      <canvas id="canvas" width="160" height="120"></canvas> -->
-
+      <!-- Horizontal - for testing on computer -->
+      <video id="video" width="160" height="120" preload autoplay loop muted></video>
+      <canvas id="canvas" width="160" height="120"></canvas>
+      
+      <!-- Vertical - for viewing on phone -->
       <!-- <video id="video" width="120" height="160" preload autoplay loop muted></video>
       <canvas id="canvas" width="120" height="160"></canvas> -->
-      <video id="video" width="240" height="320" preload autoplay loop muted></video>
-      <canvas id="canvas" width="240" height="320"></canvas>
+      <!-- <video id="video" width="240" height="320" preload autoplay loop muted></video>
+      <canvas id="canvas" width="240" height="320"></canvas> -->
     </div>
 
 
