@@ -27,11 +27,11 @@
           }
           return false;
         })
-        tracker = new tracking.ColorTracker(['green']);
+        tracker = new tracking.ColorTracker(['green', 'orange']);
         // tracker = new tracking.ColorTracker(["cyan", "magenta", "yellow"]);
         tracker['minDimension'] = 5;
-        tracker['maxDimension'] = 25;
-        tracker['minGroupSize'] = 100;
+        tracker['maxDimension'] = 100;
+        tracker['minGroupSize'] = 50;
         // tracker['customColor'] = "#000000";
 
         // ---------------------- Initiate Camera ------------------------ //
@@ -68,6 +68,6 @@
 
 
       // Turn on the Color controller (seems to be required)
-      initGUIControllers(tracker);
-      tracker.colors = ["green", "orange"] // DEBUG - initGUIControllers add 3 more colors. So we remove them
+      // initGUIControllers(tracker);
+      // tracker.colors = ["green", "orange"] // DEBUG - initGUIControllers add 3 more colors. So we remove them
       };
