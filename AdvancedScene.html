@@ -121,6 +121,9 @@ AFRAME.registerComponent('collider', {
 
 <a-scene>
   <a-assets>
+    <a-asset-item id="test-obj" src="assets/test-tex.obj"></a-asset-item>
+    <a-asset-item id="test-mtl" src="assets/test-tex.mtl"></a-asset-item>
+
     <img id="enemy-sprite" crossorigin="" src="https://ucarecdn.com/f11bb3e6-ceb4-427c-bcaa-351cabac37d5/">
 
     <script id="enemies" type="text/x-nunjucks-template">
@@ -147,7 +150,7 @@ AFRAME.registerComponent('collider', {
              projectile="speed: -0.5"
              collider="target: .enemy"></a-mixin>
   </a-assets>
-
+  <a-entity obj-model="obj: #test-obj; mtl: #test-mtl"></a-entity>
   <a-entity template="src: #enemies" data-num="10"></a-entity>
 
   <!-- Add spawner and click-listener to player. -->
