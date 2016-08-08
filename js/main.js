@@ -1,4 +1,5 @@
-// MODIFIED - Need to init rearCamera ASAP
+// ------------------ Immediate Functions ---------------------- //
+// Need to init rearCamera ASAP
 var rearCam;
 (function rearCamera() {
   console.log('inside rear camera')
@@ -8,14 +9,21 @@ var rearCam;
   })
 })()
 
-// ---------------------- On Page Load ------------------------- //
 
+
+
+
+// ---------------------- On Page Load ------------------------- //
 window.onload = function() {
   var video = document.getElementById('video');
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   // document.getElementById('video').setAttribute('style', "z-index: 1"); // Old code from old demo
   
+
+
+
+
   // ----------- Set Custom Colors & Initiate ColorTracker ---------//
   function setColors() {
     tracking.ColorTracker.registerColor('orange', function(r,g,b) {

@@ -1,4 +1,4 @@
-video, canvas {
+#video, #canvas {
   margin-left: 100px;
   margin-top: 35px;
   position: absolute;
@@ -6,4 +6,8 @@ video, canvas {
 body video {
   z-index: 0 !important;
   /*margin-left: -167px;*/
+}
+
+.a-canvas {
+  z-index: -1;
 }
