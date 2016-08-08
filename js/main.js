@@ -27,19 +27,19 @@ window.onload = function() {
   // ----------- Set Custom Colors & Initiate ColorTracker ---------//
   function setColors() {
     tracking.ColorTracker.registerColor('orange', function(r,g,b) {
-      if (r > 190 && 
-          g > 60 && g < 160 && 
+      if (r > 160 && 
+          g > 60 && g < 190 && 
           b > 40 && b < 190 &&
-          r - g > 75 && r - b > 75) {
+          r - g > 100 && r - b > 100) {
         return true;
       }
       return false;
     })
     tracking.ColorTracker.registerColor('green', function(r,g,b) {
       if (r < 150 && 
-          g > 150 && 
+          g > 100 && 
           b < 240 &&
-          g > r && g > b) {
+          g - r > 25 && g > b) {
         return true;
       }
       return false;
@@ -78,16 +78,42 @@ window.onload = function() {
         context.fillStyle = "#fff";
         context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
         context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+        // angleGun(rect.x)
       });
-    });
 
+      if (event.data.length >= 2) {
+        // Set vars equal to first two color results
+        var color1 = event.data[0].color,
+            color2 = event.data[1].color
+
+        // Test to ensure that the 2 colors are only one of each.
+        // ie: not 'green green' or 'orange orange'. aka: false positives
+        if (color1 === 'orange' && color2 === 'green' ||
+          color1 === 'green' && color2 === 'orange') {
+            // Run angleGun if it passed!
+            angleGun(event.data[0].x, event.data[0].y, event.data[1].x, event.data[1].y)
+        }
+      }
+
+    });
   }
 
+  function angleGun(x,y, x2, y2) {
+    // see https://en.wikipedia.org/wiki/Aircraft_principal_axes for defenitions
+    // ALERT - These divide-by numbers will change based on size of camera frame
+    var pitch = Math.abs(y - y2) / 2.67, // elevation diff
+        yaw = (x - x2) / 2, // left right diff
+        roll = 0 // roll not needed atm
 
+
+    document.getElementById('gun').setAttribute('rotation', pitch + ' ' + yaw + ' ' + roll)
+  }
   // ------------------ Main initialization ----------------- //
   // colorset(); // will call setcolors() and initcamera() on its own
   setColors();
   initCamera(); // Start the camera up now that we have the colors defined
+
+
   // Turn on the Color controller (seems to be required)
   // initGUIControllers(tracker);
   // tracker.colors = ["green", "orange"] // DEBUG - initGUIControllers add 3 more colors. So we remove them

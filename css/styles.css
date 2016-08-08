@@ -4,10 +4,15 @@
   position: absolute;
 }
 body video {
-  z-index: 0 !important;
+  /*z-index: 0 !important;*/
   /*margin-left: -167px;*/
 }
 
-.a-canvas {
+/*.a-canvas {
   z-index: -1;
+}*/
+
+.demo-container video,
+.demo-container canvas {
+  z-index: 1;
 }

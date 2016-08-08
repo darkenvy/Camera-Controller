@@ -33,8 +33,8 @@
       <canvas id="canvas" width="320" height="240"></canvas>
       
       <!-- Vertical - for viewing on phone -->
-      <!-- <video id="video" width="120" height="160" preload autoplay loop muted></video>
-      <canvas id="canvas" width="120" height="160"></canvas> -->
+      <!-- <video id="video" width="120" height="160" preload autoplay loop muted></video> -->
+      <!-- <canvas id="canvas" width="120" height="160"></canvas> -->
       <!-- <video id="video" width="240" height="320" preload autoplay loop muted></video>
       <canvas id="canvas" width="240" height="320"></canvas> -->
     </div>
@@ -42,6 +42,7 @@
     <!-- ======================= A-Frame ========================= -->
 
     <a-scene>
+      <!-- Assets -->
       <a-assets>
         <a-asset-item id="test-obj" src="assets/test-tex.obj"></a-asset-item>
         <a-asset-item id="test-mtl" src="assets/test-tex.mtl"></a-asset-item>
@@ -72,12 +73,15 @@
                  projectile="speed: -0.5"
                  collider="target: .enemy"></a-mixin>
       </a-assets>
+      <!-- End Assets -->
+
+
       <a-entity obj-model="obj: #test-obj; mtl: #test-mtl"></a-entity>
       <a-entity template="src: #enemies" data-num="10"></a-entity>
 
       <!-- Add spawner and click-listener to player. -->
       <a-camera id="player" position="0 1.8 0" spawner="mixin: laser; on: click" click-listener></a-camera>
-
+      <a-box id="gun" color="tomato" depth="0.5" height="0.5" width="0.5" position="0 1 -1"></a-box>
       <a-sky color="#252243"></a-sky>
     </a-scene>
 
