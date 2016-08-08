@@ -60,13 +60,19 @@ window.onload = function() {
     // })
 
     tracking.ColorTracker.registerColor('orange', function(r,g,b) {
-      if (r > 190 && g > 60 && g < 130 && b > 40 && b < 100) {
+      if (r > 190 && 
+          g > 60 && g < 160 && 
+          b > 40 && b < 190 &&
+          r - g > 75 && r - b > 75) {
         return true;
       }
       return false;
     })
     tracking.ColorTracker.registerColor('green', function(r,g,b) {
-      if (r < 100 && g > 150 && b < 200) {
+      if (r < 150 && 
+          g > 150 && 
+          b < 240 &&
+          g > r && g > b) {
         return true;
       }
       return false;
