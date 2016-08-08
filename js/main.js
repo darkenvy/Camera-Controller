@@ -88,11 +88,14 @@ window.onload = function() {
 
         // Test to ensure that the 2 colors are only one of each.
         // ie: not 'green green' or 'orange orange'. aka: false positives
-        if (color1 === 'orange' && color2 === 'green' ||
-          color1 === 'green' && color2 === 'orange') {
-            // Run angleGun if it passed!
-            angleGun(event.data[0].x, event.data[0].y, event.data[1].x, event.data[1].y)
+        if (color1 === 'orange' && color2 === 'green') {
+          angleGun(event.data[1].x, event.data[1].y, event.data[0].x, event.data[0].y)
+        } else if (color1 === 'green' && color2 === 'orange') {
+          angleGun(event.data[0].x, event.data[0].y, event.data[1].x, event.data[1].y)
+          // Green needs to be first in the execution of angleGun. 
+          // Green determines positioning
         }
+
       }
 
     });
@@ -103,10 +106,14 @@ window.onload = function() {
     // ALERT - These divide-by numbers will change based on size of camera frame
     var pitch = Math.abs(y - y2) / 2.67, // elevation diff
         yaw = (x - x2) / 2, // left right diff
-        roll = 0 // roll not needed atm
+        roll = 0, // roll not needed atm
+        posX = (x / 320) - 0.5, // Only want to adjust betweet half a meter in-game
+        posY = 0-((y / 240) - 0.5) + 1, // Y is elevation in this case
+        posZ = -1 // 
 
 
     document.getElementById('gun').setAttribute('rotation', pitch + ' ' + yaw + ' ' + roll)
+    document.getElementById('gun').setAttribute('position', posX + ' ' + posY + ' ' + posZ)
   }
   // ------------------ Main initialization ----------------- //
   // colorset(); // will call setcolors() and initcamera() on its own
