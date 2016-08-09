@@ -26,15 +26,15 @@ window.onload = function() {
 
   // ----------- Set Custom Colors & Initiate ColorTracker ---------//
   function setColors() {
-    tracking.ColorTracker.registerColor('orange', function(r,g,b) {
-      if (r > 120 && 
-          g > 40 && g < 190 && 
-          b > 40 && b < 180 &&
-          r - g > 80) {
-        return true;
-      }
-      return false;
-    })
+    // tracking.ColorTracker.registerColor('orange', function(r,g,b) {
+    //   if (r > 120 && 
+    //       g > 40 && g < 190 && 
+    //       b > 40 && b < 180 &&
+    //       r - g > 80) {
+    //     return true;
+    //   }
+    //   return false;
+    // })
     tracking.ColorTracker.registerColor('green', function(r,g,b) {
       if (r < 150 && 
           g > 100 && 
@@ -45,8 +45,9 @@ window.onload = function() {
       return false;
     })
     // tracker = new tracking.ColorTracker([]);
-    tracker = new tracking.ColorTracker(['green', 'orange']);
-    tracker['minDimension'] = 4;
+    // tracker = new tracking.ColorTracker(['green', 'orange']);
+    tracker = new tracking.ColorTracker(['green']);
+    tracker['minDimension'] = 1;
     tracker['maxDimension'] = 100;
     // tracker['minGroupSize'] = 50;
     // tracker['customColor'] = "#000000";
@@ -89,26 +90,21 @@ window.onload = function() {
           // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
           // angleGun(rect.x)
         });
-        if (event.data.length >= 1) {
-          if (event.data[0].color === 'green') {
-            positionGun(event.data[0].x, event.data[0].y)
-          } else if (event.data.length >= 2 && event.data[1].color === 'green') {
-            positionGun(event.data[1].x, event.data[1].y)
-          }
-        }
-        if (event.data.length >= 2) {
-          // Set vars equal to first two color results
-          var color1 = event.data[0].color,
-              color2 = event.data[1].color
 
-          // Test to ensure that the 2 colors are only one of each.
-          // ie: not 'green green' or 'orange orange'. aka: false positives
-          if (color1 === 'orange' && color2 === 'green') {
-            angleGun(event.data[1].x, event.data[1].y, event.data[0].x, event.data[0].y)
-          } else if (color1 === 'green' && color2 === 'orange') {
+        // if (event.data.length >= 1) {
+        //   if (event.data[0].color === 'green') {
+        //     positionGun(event.data[0].x, event.data[0].y)
+        //   } else if (event.data.length >= 2 && event.data[1].color === 'green') {
+            // positionGun(event.data[1].x, event.data[1].y)
+        //   }
+        // }
+        if (event.data.length >= 2) {
+          if (event.data[0].y > event.data[1].y) {
             angleGun(event.data[0].x, event.data[0].y, event.data[1].x, event.data[1].y)
-            // Green needs to be first in the execution of angleGun. 
-            // Green determines positioning
+            positionGun(event.data[0].x, event.data[0].y)
+          } else if (event.data[1].y >= event.data[0].y) {
+            angleGun(event.data[1].x, event.data[1].y, event.data[0].x, event.data[0].y)
+            positionGun(event.data[1].x, event.data[1].y)
           }
 
         }
