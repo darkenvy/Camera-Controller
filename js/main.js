@@ -27,10 +27,10 @@ window.onload = function() {
   // ----------- Set Custom Colors & Initiate ColorTracker ---------//
   function setColors() {
     tracking.ColorTracker.registerColor('orange', function(r,g,b) {
-      if (r > 160 && 
-          g > 60 && g < 190 && 
-          b > 40 && b < 190 &&
-          r - g > 100 && r - b > 100) {
+      if (r > 120 && 
+          g > 40 && g < 190 && 
+          b > 40 && b < 180 &&
+          r - g > 80) {
         return true;
       }
       return false;
@@ -46,9 +46,9 @@ window.onload = function() {
     })
     // tracker = new tracking.ColorTracker([]);
     tracker = new tracking.ColorTracker(['green', 'orange']);
-    tracker['minDimension'] = 5;
+    tracker['minDimension'] = 4;
     tracker['maxDimension'] = 100;
-    tracker['minGroupSize'] = 50;
+    // tracker['minGroupSize'] = 50;
     // tracker['customColor'] = "#000000";
   }
 
@@ -117,8 +117,8 @@ window.onload = function() {
     });
   }
   function positionGun(x,y) {
-    var posX = (x / 320) - 0.5, // Only want to adjust betweet half a meter in-game
-        posY = 0-((y / 240) - 0.5) + 1, // Y is elevation in this case
+    var posX = (x * 0.01) - 0.5, // Only want to adjust betweet half a meter in-game
+        posY = 0-((y * 0.01) - 0.5) + 1, // Y is elevation in this case
         posZ = -1 // 
 
     document.getElementById('gun').setAttribute('position', posX + ' ' + posY + ' ' + posZ)
@@ -126,8 +126,8 @@ window.onload = function() {
   function angleGun(x,y, x2, y2) {
     // see https://en.wikipedia.org/wiki/Aircraft_principal_axes for defenitions
     // ALERT - These divide-by numbers will change based on size of camera frame
-    var pitch = Math.abs(y - y2) / 2.67, // elevation diff
-        yaw = (x - x2) / 2, // left right diff
+    var pitch = Math.abs(y - y2) / 1.1112, // elevation diff
+        yaw = (x - x2), // left right diff
         roll = 0 // roll not needed atm
 
     document.getElementById('gun').setAttribute('rotation', pitch + ' ' + yaw + ' ' + roll)
