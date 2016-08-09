@@ -44,8 +44,13 @@
     <a-scene>
       <!-- Assets -->
       <a-assets>
-        <a-asset-item id="test-obj" src="assets/test-tex.obj"></a-asset-item>
-        <a-asset-item id="test-mtl" src="assets/test-tex.mtl"></a-asset-item>
+        <a-asset-item id="test-obj" src="assets/pistol/Pistol.obj"></a-asset-item>
+        <a-asset-item id="test-mtl" src="assets/pistol/Pistol.mtl"></a-asset-item>
+
+        <a-asset-item id="room-obj" src="assets/room/zigzag-room.obj"></a-asset-item>
+        <a-asset-item id="room-mtl" src="assets/room/zigzag-room.mtl"></a-asset-item>
+        <!-- <a-asset-item id="test-obj" src="assets/test-tex.obj"></a-asset-item>
+        <a-asset-item id="test-mtl" src="assets/test-tex.mtl"></a-asset-item> -->
 
         <img id="enemy-sprite" crossorigin="" src="https://ucarecdn.com/f11bb3e6-ceb4-427c-bcaa-351cabac37d5/">
 
@@ -76,13 +81,15 @@
       <!-- End Assets -->
 
 
-      <a-entity obj-model="obj: #test-obj; mtl: #test-mtl"></a-entity>
+      <a-entity id="gun" obj-model="obj: #test-obj; mtl: #test-mtl" rotation="0 180 0" position="0 1 -1"></a-entity>
+      <a-entity id="room" obj-model="obj: #room-obj; mtl: #room-mtl" material="shader: flat" rotation="0 90 0" position="-1 0.4 -5" scale="2.5 2.5 2.5"></a-entity>
       <a-entity template="src: #enemies" data-num="10"></a-entity>
 
       <!-- Add spawner and click-listener to player. -->
+      <!-- <a-box id="gun" color="tomato" depth="0.5" height="0.5" width="0.5" position="0 1 -1"></a-box> -->
       <a-camera id="player" position="0 1.8 0" spawner="mixin: laser; on: click" click-listener></a-camera>
-      <a-box id="gun" color="tomato" depth="0.5" height="0.5" width="0.5" position="0 1 -1"></a-box>
       <a-sky color="#252243"></a-sky>
+      <a-entity light="type: ambient; color: #ccc"></a-entity>
     </a-scene>
 
   </body>

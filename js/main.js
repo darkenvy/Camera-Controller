@@ -1,3 +1,8 @@
+// aNode is the back node on the gun. The one used for position tracking
+var aNodeLastX, aNodeLastY = 0,
+    nodeLastDist = 10,
+    gunLastPitch, gunLastYaw, gunLastRoll = 0 // currently unused
+
 // ---------------------- On Page Load ------------------------- //
 window.onload = function() {
   var video = document.getElementById('video');
@@ -45,14 +50,32 @@ window.onload = function() {
           context.strokeRect(rect.x, rect.y, rect.width, rect.height);
         });
 
-        if (event.data.length >= 2) {
-          if (event.data[0].y > event.data[1].y) {
-            angleGun(event.data[0].x, event.data[0].y, event.data[1].x, event.data[1].y)
+        if (event.data.length == 1) {
+          // If the previous location is close to the current location,
+          // then it must be the same node. And we can position it.
+          if (Math.abs(aNodeLastX - event.data[0].x) < nodeLastDist ) {
+            aNodeLastX = event.data[0].x
+            aNodeLastY = event.data[0].y
+            nodeLastDist = 100 // Since this passed the first time, just open it
             positionGun(event.data[0].x, event.data[0].y)
-          } else if (event.data[1].y >= event.data[0].y) {
+          }
+        }
+
+        if (event.data.length >= 2) {
+          if (event.data[1].y >= event.data[0].y) {
+            aNodeLastX = event.data[1].x
+            aNodeLastY = event.data[1].y
+            nodeLastDist = event.data[1].y - (event.data[0].y + event.data[0].height)
             angleGun(event.data[1].x, event.data[1].y, event.data[0].x, event.data[0].y)
             positionGun(event.data[1].x, event.data[1].y)
-          }
+          } 
+          // else if (event.data[0].y > event.data[1].y) {
+            // aNodeLastX = event.data[0].x
+            // aNodeLastY = event.data[0].y
+            // nodeLastDist = event.data[0].y - (event.data[1].y + event.data[1].height)
+            // angleGun(event.data[0].x, event.data[0].y, event.data[1].x, event.data[1].y)
+            // positionGun(event.data[0].x, event.data[0].y)
+          // }
 
         }
       }
@@ -63,14 +86,13 @@ window.onload = function() {
     var posX = (x * 0.01) - 0.5, // Only want to adjust betweet half a meter in-game
         posY = 0-((y * 0.01) - 0.5) + 1, // Y is elevation in this case
         posZ = -1 // 
-
     document.getElementById('gun').setAttribute('position', posX + ' ' + posY + ' ' + posZ)
   }
   function angleGun(x,y, x2, y2) {
     // see https://en.wikipedia.org/wiki/Aircraft_principal_axes for defenitions
     // ALERT - These divide-by numbers will change based on size of camera frame
-    var pitch = Math.abs(y - y2) / 1.1112, // elevation diff
-        yaw = (x - x2), // left right diff
+    var pitch = 0-Math.abs(y - y2) / 1.1112, // elevation diff
+        yaw = ((x - x2)*2) + 180, // left right diff + 180 degree offset
         roll = 0 // roll not needed atm
     document.getElementById('gun').setAttribute('rotation', pitch + ' ' + yaw + ' ' + roll)
   }
