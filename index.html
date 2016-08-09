@@ -49,6 +49,8 @@
 
         <a-asset-item id="room-obj" src="assets/room/zigzag-room.obj"></a-asset-item>
         <a-asset-item id="room-mtl" src="assets/room/zigzag-room.mtl"></a-asset-item>
+        <img id="sky" src="assets/room/SKY1.PNG" alt="">
+        <!-- <a-asset-item id="sky" src="assets/room/SKY1.PNG"></a-asset-item> -->
         <!-- <a-asset-item id="test-obj" src="assets/test-tex.obj"></a-asset-item>
         <a-asset-item id="test-mtl" src="assets/test-tex.mtl"></a-asset-item> -->
 
@@ -89,6 +91,9 @@
       <!-- <a-box id="gun" color="tomato" depth="0.5" height="0.5" width="0.5" position="0 1 -1"></a-box> -->
       <a-camera id="player" position="0 1.8 0" spawner="mixin: laser; on: click" click-listener></a-camera>
       <a-sky color="#252243"></a-sky>
+      <a-entity geometry="primitive: sphere; radius: 1000"
+          material="src: #sky"
+          scale="1 1 -1"></a-entity>
       <a-entity light="type: ambient; color: #ccc"></a-entity>
     </a-scene>
 
