@@ -65,3 +65,28 @@ function rgbToHsl(r, g, b){
 
     return [h, s, l];
 }
+
+
+// ------------------ Immediate Functions ---------------------- //
+// Need to init rearCamera ASAP
+// var rearCam;
+// (function rearCamera() {
+//   console.log('inside rear camera')
+//   MediaStreamTrack.getSources(function(s) {
+//     // MODIFIED - Manually specified 1 as the rear camera for the S7. Should default to normal for desktop testing
+//     rearCam = s[1].id;
+//   })
+// })()
+
+
+tracker['maxDimension'] = 100;
+tracker['minGroupSize'] = 50;
+tracker['customColor'] = "#000000";
+
+
+// if (rect.color === 'custom') {rect.color = tracker.customColor;}
+          // context.font = '11px Helvetica';
+          // context.fillStyle = "#fff";
+          // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
+          // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
+          // angleGun(rect.x)
