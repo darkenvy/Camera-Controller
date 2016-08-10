@@ -15,9 +15,9 @@ window.onload = function() {
 
     tracking.ColorTracker.registerColor('green', function(r,g,b) {
       if (r < 150 && 
-          g > 100 && 
+          g > 0 && 
           b < 240 &&
-          g - r > 25 && g > b) {
+          g - r > 20 && g - b > 10) {
         return true;
       }
       return false;
@@ -25,6 +25,7 @@ window.onload = function() {
 
     tracker = new tracking.ColorTracker(['green']);
     tracker['minDimension'] = 1;
+    tracker['minGroupSize'] = 4;
   }
 
 

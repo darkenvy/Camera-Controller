@@ -12,10 +12,21 @@ window.onload = function() {
     }
     return false;
   })
+  tracking.ColorTracker.registerColor('green', function(r,g,b) {
+    if (r < 150 && 
+        g > 0 && 
+        b < 240 &&
+        g - r > 20 && g - b > 10) {
+      return true;
+    }
+    return false;
+  })
+
+  tracker = new tracking.ColorTracker(['green']);
   
-  tracker = new tracking.ColorTracker(['orange']);
-  tracker['minDimension'] = 5;
-  tracker['minGroupSize'] = 100;
+  // tracker = new tracking.ColorTracker(['orange']);
+  tracker['minDimension'] = 1;
+  tracker['minGroupSize'] = 4;
   // tracker['maxDimension'] = 25;
   // tracker['customColor'] = "#000000";
 
@@ -41,8 +52,8 @@ window.onload = function() {
   });
 
   // Color slider
-  initGUIControllers(tracker);
-  tracker.colors = ["orange"] // DEBUG - initGUIControllers add 3 more colors. So we remove them
+  // initGUIControllers(tracker);
+  // tracker.colors = ["orange"] // DEBUG - initGUIControllers add 3 more colors. So we remove them
   // console.log(tracking.ColorTracker.getColor("green"));
   
 
