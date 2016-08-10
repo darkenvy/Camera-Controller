@@ -90,3 +90,28 @@ tracker['customColor'] = "#000000";
           // context.fillText('x: ' + rect.x + 'px', rect.x + rect.width + 5, rect.y + 11);
           // context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
           // angleGun(rect.x)
+
+
+
+==================
+
+<img id="enemy-sprite" crossorigin="" src="https://ucarecdn.com/f11bb3e6-ceb4-427c-bcaa-351cabac37d5/">
+
+<script id="enemies" type="text/x-nunjucks-template">
+  <a-entity layout="type: circle; radius: 5" position="0 0.5 0">
+    <a-animation attribute="rotation" dur="30000" easing="linear" repeat="indefinite" to="0 360 0"></a-animation>
+
+    {% for x in range(num) %}
+    <a-image class="enemy" look-at="#player" src="#enemy-sprite" transparent="true">
+      <!-- Attach collision handler animations. -->
+      <a-animation attribute="opacity" begin="collider-hit" dur="400" ease="linear"
+                   from="1" to="0"></a-animation>
+      <a-animation attribute="scale" begin="collider-hit" dur="400" ease="linear"
+                   to="0 0 0"></a-animation>
+    </a-image>
+    {% endfor %}
+  </a-entity>
+</script>
+
+
+================

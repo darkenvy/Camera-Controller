@@ -13,9 +13,9 @@
     <script src="vendor/color_camera_gui.js"></script>
     <!-- A-Frame Materials -->
     <script src="vendor/aframe.js"></script>
-    <script src="https://rawgit.com/ngokevin/aframe-layout-component/master/dist/aframe-layout-component.min.js"></script>
-    <script src="https://rawgit.com/ngokevin/aframe-template-component/master/dist/aframe-template-component.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/nunjucks/2.3.0/nunjucks.min.js"></script>
+    <!-- <script src="https://rawgit.com/ngokevin/aframe-layout-component/master/dist/aframe-layout-component.min.js"></script> -->
+    <!-- <script src="https://rawgit.com/ngokevin/aframe-template-component/master/dist/aframe-template-component.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/nunjucks/2.3.0/nunjucks.min.js"></script> -->
     <!-- Other -->
     <script src="js/main.js"></script>
     <script src="js/main-aframe.js"></script>
@@ -50,27 +50,13 @@
         <a-asset-item id="room-obj" src="assets/room/zigzag-room.obj"></a-asset-item>
         <a-asset-item id="room-mtl" src="assets/room/zigzag-room.mtl"></a-asset-item>
         <img id="sky" src="assets/room/SKY1.PNG" alt="">
+        <img id="enemy-human" src="assets/POSSE1.PNG" alt="">
+        <img id="enemy-brown" src="assets/TROOA1.PNG" alt="">
         <!-- <a-asset-item id="sky" src="assets/room/SKY1.PNG"></a-asset-item> -->
         <!-- <a-asset-item id="test-obj" src="assets/test-tex.obj"></a-asset-item>
         <a-asset-item id="test-mtl" src="assets/test-tex.mtl"></a-asset-item> -->
-
-        <img id="enemy-sprite" crossorigin="" src="https://ucarecdn.com/f11bb3e6-ceb4-427c-bcaa-351cabac37d5/">
-
-        <script id="enemies" type="text/x-nunjucks-template">
-          <a-entity layout="type: circle; radius: 5" position="0 0.5 0">
-            <a-animation attribute="rotation" dur="30000" easing="linear" repeat="indefinite" to="0 360 0"></a-animation>
-
-            {% for x in range(num) %}
-            <a-image class="enemy" look-at="#player" src="#enemy-sprite" transparent="true">
-              <!-- Attach collision handler animations. -->
-              <a-animation attribute="opacity" begin="collider-hit" dur="400" ease="linear"
-                           from="1" to="0"></a-animation>
-              <a-animation attribute="scale" begin="collider-hit" dur="400" ease="linear"
-                           to="0 0 0"></a-animation>
-            </a-image>
-            {% endfor %}
-          </a-entity>
-        </script>
+        
+        
         
         <!-- Laser. -->
         <a-mixin id="laser"
@@ -81,10 +67,18 @@
                  collider="target: .enemy"></a-mixin>
       </a-assets>
       <!-- End Assets -->
-
-
+      
+      <!-- Enemies -->
+      <a-image look-at="#player" src="#enemy-human" transparent="true" 
+               position="1 1.3 -3.5" scale="1.5 1.5 1.5"></a-image>
+      <a-image look-at="#player" src="#enemy-human" transparent="true" 
+               position="-3 1.3 -6.5" scale="1.5 1.5 1.5"></a-image>
+      <a-image look-at="#player" src="#enemy-brown" transparent="true" 
+               position="-5 4.0 -9.5" scale="1.5 1.5 1.5"></a-image>
+      
+      <!-- Other -->
       <a-entity id="gun" obj-model="obj: #test-obj; mtl: #test-mtl" rotation="0 180 0" position="0 1 -1"></a-entity>
-      <a-entity id="room" obj-model="obj: #room-obj; mtl: #room-mtl" material="shader: flat" rotation="0 90 0" position="-1 0.4 -5" scale="2.5 2.5 2.5"></a-entity>
+      <a-entity id="room" obj-model="obj: #room-obj; mtl: #room-mtl" material="shader: flat" rotation="0 90 0" position="-1 0.4 -4.5" scale="2.5 2.5 2.5"></a-entity>
       <a-entity template="src: #enemies" data-num="10"></a-entity>
 
       <!-- Add spawner and click-listener to player. -->
