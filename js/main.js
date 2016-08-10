@@ -85,16 +85,30 @@ window.onload = function() {
   }
   function positionGun(x,y) {
     var posX = (x * 0.01) - 0.5, // Only want to adjust betweet half a meter in-game
-        posY = 0-((y * 0.01) - 0.5) + 1, // Y is elevation in this case
-        posZ = -1 // 
+        posY = 0-((y * 0.01) - 0.5) + 1.5, // Y is elevation in this case
+        posZ = -1 // Not used. How far away from the player the gun is
+        
+        // currPos = document.getElementById('gun').getAttribute('position')
+        // glideX = (currPos.x*0.01 -0.5) + ( posX / ((Math.abs((currPos.x*0.01 -0.5) - posX)) ) )
+        // console.log(glideX);
+        // glideY = currPos.y + currPos.y - posY / 10
+
     document.getElementById('gun').setAttribute('position', posX + ' ' + posY + ' ' + posZ)
   }
   function angleGun(x,y, x2, y2) {
     // see https://en.wikipedia.org/wiki/Aircraft_principal_axes for defenitions
     // ALERT - These divide-by numbers will change based on size of camera frame
+    
     var pitch = 0-Math.abs(y - y2) / 1.1112, // elevation diff
-        yaw = ((x - x2)*2) + 180, // left right diff + 180 degree offset
+        yaw = ((x - x2)*2) - (( (x-50) / 50 )*60) + 180, // left right diff + 180 degree offset
         roll = 0 // roll not needed atm
+
+    console.log((x/100)*60)
+
+    // var pitch = 0-Math.abs(y - y2) / 1.1112, // elevation diff
+    //     yaw = ((x - x2)*2) + 180, // left right diff + 180 degree offset
+    //     roll = 0 // roll not needed atm
+    
     document.getElementById('gun').setAttribute('rotation', pitch + ' ' + yaw + ' ' + roll)
   }
   // ------------------ Main initialization ----------------- //
