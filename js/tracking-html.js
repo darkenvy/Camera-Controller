@@ -7,7 +7,7 @@ window.onload = function() {
   tracking.ColorTracker.registerColor('blue', function(r,g,b) {
     if (r > 20 && r < 200 &&
         g > 20 && g < 200 &&
-        b - r > 60 && b - g > 60) {
+        b - r > 30 && b - g > 30 && b - (r+g) > 30 ) {
       return true;
     }
     return false;

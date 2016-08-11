@@ -29,15 +29,28 @@ AFRAME.registerComponent('spawner', {
     // Have the spawned entity face the same direction as the entity.
     // Allow the entity to further modify the inherited rotation.
     position.setFromMatrixPosition(matrixWorld);
+    // modPosition = {
+    //   x: position.x,
+    //   y: position.y,
+    //   z: position.z
+    // }
+    console.log('POSITION: ', position)
     entity.setAttribute('position', position);
     entity.setAttribute('mixin', this.data.mixin);
     entity.addEventListener('loaded', function () {
       entityRotation = entity.getComputedAttribute('rotation');
+      console.log('ANGLE: ', pitch, yaw, roll)
+      // entity.setAttribute('rotation', {
+      //   x: entityRotation.x + rotation.x,
+      //   y: entityRotation.y + rotation.y,
+      //   z: entityRotation.z + rotation.z
+      // });
       entity.setAttribute('rotation', {
-        x: entityRotation.x + rotation.x,
-        y: entityRotation.y + rotation.y,
-        z: entityRotation.z + rotation.z
+        x: 90 - (pitch*1.4), // pitch + 90
+        y: 0,
+        z: 180 - (yaw*0.99) //yaw
       });
+      
     });
     el.sceneEl.appendChild(entity);
   }

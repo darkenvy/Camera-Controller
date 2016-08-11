@@ -1,7 +1,8 @@
 // aNode is the back node on the gun. The one used for position tracking
 var aNodeLastX, aNodeLastY = 0,
     nodeLastDist = 10,
-    gunLastPitch, gunLastYaw, gunLastRoll = 0 // currently unused
+    gunLastPitch, gunLastYaw, gunLastRoll = 0, // currently unused
+    pitch = 0, yaw = 0, roll = 0
 
 // ---------------------- On Page Load ------------------------- //
 window.onload = function() {
@@ -99,11 +100,12 @@ window.onload = function() {
     // see https://en.wikipedia.org/wiki/Aircraft_principal_axes for defenitions
     // ALERT - These divide-by numbers will change based on size of camera frame
     
-    var pitch = (0-Math.abs(y - y2) * 1.4) + 15, // elevation diff - offset
-        yaw = ((x - x2)*2) - (( (x-50) / 50 )*60) + 180, // left right diff + 180 degree offset
-        roll = 0 // roll not needed atm
+    // These variables are now global so that main-aframe.js has access to it in the laser calculations
+    pitch = (0-Math.abs(y - y2) * 1.4) + 15 // elevation diff - offset
+    yaw = ((x - x2)*2) - (( (x-50) / 50 )*60) + 180 // left right diff + 180 degree offset
+    roll = 0 // roll not needed atm
 
-    console.log((x/100)*60)
+    // console.log((x/100)*60)
 
     // var pitch = 0-Math.abs(y - y2) / 1.1112, // elevation diff
     //     yaw = ((x - x2)*2) + 180, // left right diff + 180 degree offset
