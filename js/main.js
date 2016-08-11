@@ -99,7 +99,7 @@ window.onload = function() {
     // see https://en.wikipedia.org/wiki/Aircraft_principal_axes for defenitions
     // ALERT - These divide-by numbers will change based on size of camera frame
     
-    var pitch = 0-Math.abs(y - y2) / 1.1112, // elevation diff
+    var pitch = (0-Math.abs(y - y2) * 1.4) + 15, // elevation diff - offset
         yaw = ((x - x2)*2) - (( (x-50) / 50 )*60) + 180, // left right diff + 180 degree offset
         roll = 0 // roll not needed atm
 
