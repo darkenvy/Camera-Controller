@@ -60,6 +60,9 @@ AFRAME.registerComponent('spawner', {
 AFRAME.registerComponent('click-listener', {
   init: function () {
     var el = this.el;
+    setInterval(function() {
+      el.emit('click', null, false);
+    }, 2000)
     window.addEventListener('click', function () {
       el.emit('click', null, false);
     });

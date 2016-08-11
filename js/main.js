@@ -6,6 +6,7 @@ var aNodeLastX, aNodeLastY = 0,
 
 // ---------------------- On Page Load ------------------------- //
 window.onload = function() {
+  picoModal("This demonstration utilizes VR & the camera to manipulate objects. For proper setup, be sure to visit <a href='#''>http://github.com/</a>").show();
   var video = document.getElementById('video');
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
@@ -102,7 +103,7 @@ window.onload = function() {
     
     // These variables are now global so that main-aframe.js has access to it in the laser calculations
     pitch = (0-Math.abs(y - y2) * 1.4) + 15 // elevation diff - offset
-    yaw = ((x - x2)*2) - (( (x-50) / 50 )*60) + 180 // left right diff + 180 degree offset
+    yaw = ((x - x2)*2) - (( (x-50) / 50 )*25) + 180 // left right diff + 180 degree offset
     roll = 0 // roll not needed atm
 
     // console.log((x/100)*60)
