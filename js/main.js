@@ -6,7 +6,7 @@ var aNodeLastX, aNodeLastY = 0,
 
 // ---------------------- On Page Load ------------------------- //
 window.onload = function() {
-  picoModal("This demonstration utilizes VR & the camera to manipulate objects. For proper setup, be sure to visit <a href='#''>http://github.com/</a>").show();
+  picoModal("<b>Tactile VR Doom</b> is a tech demonstration that illustrates the possibilities of using the physical world to modify the VR world. This is accomplished by utilizing the back-facing camera on the phone while using Google Cardboard (a Virtual Reality viewer). For proper setup, be sure to visit <a href='https://github.com/darkenvy/Tactile-VR-Doom-Demo''>the Github Page</a>").show();
   var video = document.getElementById('video');
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
