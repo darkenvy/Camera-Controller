@@ -4,18 +4,37 @@ window.onload = function() {
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   
-  tracking.ColorTracker.registerColor('orange', function(r,g,b) {
-    if (r > 190 && 
-        g > 60 && g < 130 && 
-        b > 40 && b < 100) {
+  tracking.ColorTracker.registerColor('blue', function(r,g,b) {
+    if (r > 20 && r < 200 &&
+        g > 20 && g < 200 &&
+        b - r > 30 && b - g > 30 && b - (r+g) > 30 ) {
       return true;
     }
     return false;
   })
+  //   if (r > 100 && 
+  //       g > 60 && g < 150 && 
+  //       b > 40 && b < 150 &&
+  //       r - g > 60 && r - b > 60) {
+  //     return true;
+  //   }
+  //   return false;
+  // })
+  tracking.ColorTracker.registerColor('green', function(r,g,b) {
+    if (r < 150 && 
+        g > 0 && 
+        b < 240 &&
+        g - r > 20 && g - b > 10) {
+      return true;
+    }
+    return false;
+  })
+
+  tracker = new tracking.ColorTracker(['green', 'blue']);
   
-  tracker = new tracking.ColorTracker(['orange']);
-  tracker['minDimension'] = 5;
-  tracker['minGroupSize'] = 100;
+  // tracker = new tracking.ColorTracker(['orange']);
+  tracker['minDimension'] = 1;
+  // tracker['minGroupSize'] = 4;
   // tracker['maxDimension'] = 25;
   // tracker['customColor'] = "#000000";
 
@@ -41,8 +60,8 @@ window.onload = function() {
   });
 
   // Color slider
-  initGUIControllers(tracker);
-  tracker.colors = ["orange"] // DEBUG - initGUIControllers add 3 more colors. So we remove them
+  // initGUIControllers(tracker);
+  // tracker.colors = ["orange"] // DEBUG - initGUIControllers add 3 more colors. So we remove them
   // console.log(tracking.ColorTracker.getColor("green"));
   
 
