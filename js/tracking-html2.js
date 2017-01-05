@@ -2,6 +2,8 @@ var tracker;
 var rawPoly = [[0,0], [1,0], [1,1], [0,1]];
 var currTilt = 0;
 var currHorizontal = 0;
+var currHeight = 0;
+var currDepth = 0;
 // 64 - 320
 // $('#camToggle').click(function(){
 //   $('#video').toggleClass('display', 'none');
@@ -13,8 +15,8 @@ window.onload = function() {
   var context = canvas.getContext('2d');
   tracking.ColorTracker.registerColor('green', function(r,g,b) {
     if (r < 190 && 
-        g > 60 && g < 190 &&
-        g/b > 1.5 &&
+        g > 60 &&
+        g/b > 1.35 &&
         g > r && g > b) {
       return true;
     }
@@ -64,12 +66,40 @@ window.onload = function() {
       if (Math.abs(currHorizontal - eyeCenter) > 2 && currHorizontal < eyeCenter) currHorizontal += horizontalSpeed;
       if (Math.abs(currHorizontal - eyeCenter) > 2 && currHorizontal > eyeCenter) currHorizontal -= horizontalSpeed;
       
+      // -------- Horizontal Calculation -------- //
+      
+      var eyeHeight = Math.abs((leftEye.y + rightEye.y) / 2);
+
+      var heightSpeed = parseInt(Math.abs(currHeight - eyeHeight) / 2.5);
+      if (Math.abs(currHeight - eyeHeight) > 2 && currHeight < eyeHeight) currHeight += heightSpeed;
+      if (Math.abs(currHeight - eyeHeight) > 2 && currHeight > eyeHeight) currHeight -= heightSpeed;
+
+      // -------- Depth Calculation -------- //
+
+      var eyeHeight = (leftEye.height + rightEye.height)*2;
+
+      var depthSpeed = parseInt(Math.abs((currDepth  - eyeHeight) / 5));
+      if (Math.abs(currDepth - eyeHeight) > 1 && currDepth < eyeHeight) currDepth += depthSpeed;
+      if (Math.abs(currDepth - eyeHeight) > 1 && currDepth > eyeHeight) currDepth -= depthSpeed;
+      
       // -------- Set Properties -------- //
       $('#tiltModel').attr('transform', 
-        "translate(" + currHorizontal + ",50) " + 
+        "translate(" + currHorizontal + "," + currDepth + ") " + 
         "rotate(" + currTilt + " 75 50)");
 
-      $('.debug')[0].innerHTML = currTilt + '<br>' + transformTilt + '<br>' + horizontalSpeed;
+      $('#camera').attr('position', 
+            (1-((currHorizontal-64)/512)) + 
+            ' ' + (1+(1-(currHeight/480))) +' ' + 
+            ((2-(currDepth/128))+1.5));
+
+      $('.debug')[0].innerHTML = currTilt + '<br>' + 
+                                 transformTilt + '<br>' + 
+                                 currHorizontal + '<br>' +
+                                 horizontalSpeed + '<br>' +
+                                 depthSpeed + '<br>' +
+                                 eyeHeight + '<br>' +
+                                 currHeight/240 + '<br>' +
+                                 ((2-(currDepth/128))+1.5);
     }
 
     
