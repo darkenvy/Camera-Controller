@@ -1,13 +1,16 @@
 var tracker;
-var modelOffsetX = 100;
-var modelOffsetY = 35;
-var svgPoly = [[0,0], [1,0], [1,1], [0,1]];
+var rawPoly = [[0,0], [1,0], [1,1], [0,1]];
+var currTilt = 0;
+var currHorizontal = 0;
+// 64 - 320
+// $('#camToggle').click(function(){
+//   $('#video').toggleClass('display', 'none');
+// })
 
 window.onload = function() {
   var video = document.getElementById('video');
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
-
   tracking.ColorTracker.registerColor('green', function(r,g,b) {
     if (r < 190 && 
         g > 60 && g < 190 &&
@@ -17,24 +20,17 @@ window.onload = function() {
     }
     return false;
   })
-  
   tracker = new tracking.ColorTracker(['green']);
   tracker['minDimension'] = 5;
   tracker['minGroupSize'] = 100;
   // tracker['maxDimension'] = 25;
   // tracker['customColor'] = "#000000";
-
-
-
   tracking.track('#video', tracker, { camera: true });
 
   tracker.on('track', function(event) {
     context.clearRect(0, 0, canvas.width, canvas.height);
     event.data.forEach(function(rect) {
-      if (rect.color === 'custom') {
-        rect.color = tracker.customColor;
-      }
-
+      if (rect.color === 'custom') {rect.color = tracker.customColor;}
       context.strokeStyle = rect.color;
       context.strokeRect(rect.x, rect.y, rect.width, rect.height);
       context.font = '11px Helvetica';
@@ -43,63 +39,66 @@ window.onload = function() {
       context.fillText('y: ' + rect.y + 'px', rect.x + rect.width + 5, rect.y + 22);
     });
 
-    var setModelLeft = function(leftEye) {
-        // $('.left').css('left', leftEye.x + modelOffsetX + 'px');
-        // $('.left').css('top', leftEye.y + modelOffsetY + 'px');
-        svgPoly[0] = [leftEye.x, leftEye.y]
-        svgPoly[3] = [leftEye.x, leftEye.y + (leftEye.height * 2)]
-        setUserModel();
-      }
-    var setModelRight = function(rightEye) {
-        // $('.right').css('left', rightEye.x + modelOffsetX + 'px');
-        // $('.right').css('top', rightEye.y + modelOffsetY + 'px');
-        svgPoly[1] = [rightEye.x, rightEye.y];
-        svgPoly[2] = [rightEye.x, rightEye.y + (rightEye.height * 2)];
-        setUserModel();
-    }
+    var setModel = function(leftEye, rightEye) {
+      // -------- Tilt Calculation -------- //
+      var leftArea = leftEye.width * leftEye.height,
+          rightArea = rightEye.width * rightEye.height;
       
+      var tilt = rightArea / leftArea;
+      tilt = tilt > 1 ? leftArea / rightArea : tilt;
+      tilt = 1 - tilt;
+      var lr = rightArea / leftArea > 1 ? true : false;
+      
+      var transformTilt = lr ? (tilt * 90) : 0-(tilt * 90);
+      transformTilt = transformTilt.toFixed(1);
+
+      var tiltSpeed = parseInt(Math.abs(currTilt - transformTilt) / 5);
+      if (Math.abs(currTilt - transformTilt) > 3 && currTilt < transformTilt) currTilt += tiltSpeed;
+      if (Math.abs(currTilt - transformTilt) > 3 && currTilt > transformTilt) currTilt -= tiltSpeed;
+
+      // -------- Horizontal Calculation -------- //
+
+      var eyeCenter = (leftEye.x + rightEye.x) / 2;
+
+      var horizontalSpeed = parseInt(Math.abs(currHorizontal - eyeCenter) / 2.5);
+      if (Math.abs(currHorizontal - eyeCenter) > 2 && currHorizontal < eyeCenter) currHorizontal += horizontalSpeed;
+      if (Math.abs(currHorizontal - eyeCenter) > 2 && currHorizontal > eyeCenter) currHorizontal -= horizontalSpeed;
+      
+      // -------- Set Properties -------- //
+      $('#tiltModel').attr('transform', 
+        "translate(" + currHorizontal + ",50) " + 
+        "rotate(" + currTilt + " 75 50)");
+
+      $('.debug')[0].innerHTML = currTilt + '<br>' + transformTilt + '<br>' + horizontalSpeed;
+    }
+
+    
+    // A secure way to set data points. This also flips the [0] / [1] axis
     if (event.data && event.data[0] && event.data[1]) {
       if (event.data[0].x < event.data[1].x) {
-        setModelLeft(event.data[0])
-        setModelRight(event.data[1])
+        setModel(event.data[0], event.data[1])
+        // setUserModel();
       } else if (event.data[0].x >= event.data[1].x) {
-        setModelLeft(event.data[1])
-        setModelRight(event.data[0])
+        setModel(event.data[1], event.data[0])
+        // setUserModel();
       }
     } 
+
     
   });
 };
 
-function setUserModel() {
-  var points = svgPoly[0].join(' ') + ',' +
-               svgPoly[1].join(' ') + ',' +
-               svgPoly[2].join(' ') + ',' +
-               svgPoly[3].join(' ');
-  $('#userModel').attr('points', points)
-}
+// function setUserModel() {
+  // var points = rawPoly[0].join(' ') + ',' +
+  //              rawPoly[1].join(' ') + ',' +
+  //              rawPoly[2].join(' ') + ',' +
+  //              rawPoly[3].join(' ');
+  // $('#userModel').attr('points', points);
 
-
-
-
-  // Color slider
-  // initGUIControllers(tracker);
-  // tracker.colors = ["orange", "green"] // DEBUG - initGUIControllers add 3 more colors. So we remove them
-  // console.log(tracking.ColorTracker.getColor("green"));
-
-// else if (event.data[0] && event.data.length === 1) {
-    //   // This is when one cuts out. We dont know which one though
-    //   // So the error handling would have to deduce it  
-    //   var x = event.data[0].x,
-    //       aX = parseInt($('.left').css('left')),
-    //       bX = parseInt($('.right').css('left'));
-    //   if (Math.abs(x - aX) < Math.abs(x - bX)) {
-    //     // console.log(Math.abs(x - aX), Math.abs(x - bX));
-    //     console.log('1');
-    //     // setModelLeft(event.data[0]);
-    //   } else if (Math.abs(x - aX) >= Math.abs(x - bX)) {
-    //     console.log('2');
-    //     // console.log(Math.abs(x - aX), Math.abs(x - bX));
-    //     setModelRight(event.data[0]);
-    //   }
-    // }
+  // var offset = 4;
+  // var yaw = Math.abs(rawPoly[3][1] - rawPoly[0][1]) -
+            // Math.abs(rawPoly[2][1] - rawPoly[1][1])
+  // var distance = ( Math.abs(rawPoly[0][0] - rawPoly[1][0]) ) / 100 + offset;
+  // $('.debug')[0].innerText = yaw;
+  // $('#camera').attr('position', '0 1.8 ' + distance);
+// }
